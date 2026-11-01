@@ -193,7 +193,7 @@ def run_generation(inputs: PlanInputs, slot, panel, avoid: list[str] | None = No
             experience=inputs.experience,
             days_per_week=inputs.days_per_week,
             equipment=inputs.equipment,
-            other_equipment=inputs.other_equipment,
+            # other_equipment=inputs.other_equipment,
             limitations=inputs.limitations,
             preferences=inputs.preferences,
             avoid=avoid,
@@ -228,7 +228,7 @@ form_col, plan_col = st.columns([2, 3], gap="large")
 
 with form_col:
     with st.container(border=True):
-        # st.markdown('<p class="fh">About you</p>', unsafe_allow_html=True)
+        st.markdown('<p class="fh">About you</p>', unsafe_allow_html=True)
         col1, col2 = st.columns(2)
         with col1:
             goal = st.selectbox(
@@ -238,15 +238,15 @@ with form_col:
                 placeholder="Choose your goal",
                 key="goal",
             )
-            # st.caption("Pick the one that matters most. We'll chase the rest later.")
+            st.caption("Start with your main focus.")
         with col2:
             experience = st.selectbox(
                 "Experience level", EXPERIENCE_LEVELS, index=None, placeholder="Choose your level", key="experience"
             )
-            # st.caption("Be honest. I won't tell the other rats.")
+            st.caption("Be honest. I won't tell the other rats.")
 
         st.markdown(SECTION_BREAK, unsafe_allow_html=True)
-        # st.markdown('<p class="fh">Your schedule and gear</p>', unsafe_allow_html=True)
+        st.markdown('<p class="fh">Your schedule and gear</p>', unsafe_allow_html=True)
         days_value = st.session_state.get("days", 1)
         label_col, value_col = st.columns([4, 1])
         label_col.markdown("Days available per week")
@@ -266,16 +266,16 @@ with form_col:
             key="equipment",
             on_change=on_equipment_change,
         )
-        other_equipment = st.text_input(
-            "Other equipment (optional)",
-            max_chars=MAX_TEXT_LENGTH,
-            placeholder="Resistance bands, pull-up bar",
-            key="other_equipment",
-        )
+        # other_equipment = st.text_input(
+        #     "Other equipment (optional)",
+        #     max_chars=MAX_TEXT_LENGTH,
+        #     placeholder="Resistance bands, pull-up bar",
+        #     key="other_equipment",
+        # )
         # st.caption("Got gear that's not listed? Add it here.")
 
         st.markdown(SECTION_BREAK, unsafe_allow_html=True)
-        # st.markdown('<p class="fh">Limits and preferences</p>', unsafe_allow_html=True)
+        st.markdown('<p class="fh">Limits and preferences</p>', unsafe_allow_html=True)
         col1, col2 = st.columns(2)
         with col1:
             limitations = st.text_area(
@@ -285,7 +285,7 @@ with form_col:
                 height=100,
                 key="limitations",
             )
-            # st.caption("Tell me what hurts. I'll work around it.")
+            st.caption("Tell me what hurts. I'll work around it.")
         with col2:
             preferences = st.text_area(
                 "Anything else? (optional)",
@@ -294,14 +294,14 @@ with form_col:
                 height=100,
                 key="preferences",
             )
-            # st.caption("Time limits, likes, dislikes.")
+            st.caption("Time limits, likes, dislikes.")
 
     form_inputs = PlanInputs(
         goal=(goal or "").strip(),
         experience=experience or "",
         days_per_week=int(days),
         equipment=list(equipment or []),
-        other_equipment=other_equipment,
+        # other_equipment=other_equipment,
         limitations=limitations,
         preferences=preferences,
     )

@@ -101,7 +101,7 @@ class PlanInputs:
     experience: str
     days_per_week: int
     equipment: list[str]
-    other_equipment: str = ""
+    # other_equipment: str = ""
     limitations: str = ""
     preferences: str = ""
 
@@ -158,7 +158,7 @@ def validate_inputs(inputs: PlanInputs) -> None:
     if "No equipment" in inputs.equipment and len(inputs.equipment) > 1:
         problems.append("choose either 'No equipment' or the gear you have, not both")
     for label, text in [
-        ("Other equipment", inputs.other_equipment),
+        # ("Other equipment", inputs.other_equipment),
         ("Injuries or limitations", inputs.limitations),
         ("Anything else", inputs.preferences),
     ]:
@@ -224,8 +224,8 @@ Use plain strings for sets, reps and rest. For cardio or timed work, put the dur
 def build_prompt(inputs: PlanInputs, avoid: list[str] | None = None) -> str:
     """Turn the form into a trainer-style brief the model can't easily ignore."""
     equipment_lines = "\n".join(f"- {e}: {EQUIPMENT_GUIDANCE[e]}" for e in inputs.equipment)
-    if inputs.other_equipment.strip():
-        equipment_lines += "\n- Also available (client's words, in <client_notes> below)."
+    # if inputs.other_equipment.strip():
+    #     equipment_lines += "\n- Also available (client's words, in <client_notes> below)."
 
     if inputs.days_per_week <= 2:
         split = "Full-body sessions."
@@ -253,7 +253,6 @@ EQUIPMENT AVAILABLE:
 {equipment_lines}
 
 <client_notes>
-Other equipment: {inputs.other_equipment.strip() or "none"}
 Injuries or limitations: {inputs.limitations.strip() or "none reported"}
 Anything else (time limits, likes, dislikes): {inputs.preferences.strip() or "nothing"}
 </client_notes>
@@ -351,12 +350,12 @@ def find_equipment_violations(names: list[str], inputs: PlanInputs) -> list[str]
     """Exercises that mention gear the client doesn't have."""
     if "Full gym" in inputs.equipment:
         return []
-    extra = inputs.other_equipment.lower()
+    # extra = inputs.other_equipment.lower()
     violations = []
     for name in names:
         lowered = name.lower()
         for keyword, needs in GEAR_KEYWORDS.items():
-            if keyword in lowered and needs not in inputs.equipment and keyword not in extra:
+            if keyword in lowered and needs not in inputs.equipment:
                 violations.append(name)
                 break
     return violations
@@ -409,7 +408,7 @@ def generate_plan(
     experience: str,
     days_per_week: int,
     equipment: list[str],
-    other_equipment: str = "",
+    # other_equipment: str = "",
     limitations: str = "",
     preferences: str = "",
     avoid: list[str] | None = None,
@@ -424,7 +423,7 @@ def generate_plan(
         experience=experience,
         days_per_week=days_per_week,
         equipment=list(equipment),
-        other_equipment=other_equipment,
+        # other_equipment=other_equipment,
         limitations=limitations,
         preferences=preferences,
     )
@@ -489,7 +488,6 @@ Equipment:
 {equipment_lines}
 <client_notes>
 Goal: {" ".join(inputs.goal.split())}
-Other equipment: {inputs.other_equipment.strip() or "none"}
 Injuries or limitations: {inputs.limitations.strip() or "none reported"}
 Preferences: {inputs.preferences.strip() or "nothing"}
 </client_notes>
